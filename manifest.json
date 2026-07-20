@@ -1,0 +1,10 @@
+{
+  "name": "SRSVault",
+  "short_name": "SRSVault",
+  "description": "Prescribing Error Documentation Template Library",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f9",
+  "theme_color": "#123b52",
+  "icons": []
+}

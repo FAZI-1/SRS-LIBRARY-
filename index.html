@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#123b52" />
+  <meta name="description" content="Prescribing Error Documentation Template Library" />
+  <title>SRSVault</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Medication Safety Knowledge Tool</p>
+      <h1>SRSVault</h1>
+      <p class="subtitle">Prescribing Error Documentation Template Library</p>
+    </div>
+    <div class="top-actions">
+      <button id="addTemplateBtn" class="primary-btn">+ Add Template</button>
+      <button id="adminBtn" class="secondary-btn">Administrator</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero card">
+      <div>
+        <h2>Ready-to-use prescribing error documentation</h2>
+        <p>Search, review, copy, and contribute reusable templates that support faster and more complete safety reporting.</p>
+      </div>
+      <div class="stats">
+        <div><strong id="templateCount">0</strong><span>Active Templates</span></div>
+        <div><strong id="contributorCount">0</strong><span>Contributors</span></div>
+        <div><strong id="categoryCount">0</strong><span>Categories</span></div>
+      </div>
+    </section>
+
+    <section class="filters card">
+      <label class="grow">
+        Search Library
+        <input id="searchInput" type="search" placeholder="Search title, medication, category, or keyword..." />
+      </label>
+      <label>
+        Category
+        <select id="categoryFilter"><option value="">All Categories</option></select>
+      </label>
+      <label>
+        Error Stage
+        <select id="stageFilter">
+          <option value="">All Stages</option>
+          <option value="Before Reaching Patient">Before Reaching Patient</option>
+          <option value="After Reaching Patient">After Reaching Patient</option>
+        </select>
+      </label>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <div>
+          <h2>Template Library</h2>
+          <p>Open a case to review and copy a complete report.</p>
+        </div>
+      </div>
+      <div id="templateGrid" class="template-grid"></div>
+      <div id="emptyState" class="empty card hidden">
+        <h3>No templates found</h3>
+        <p>Try changing the search terms or contribute a new template.</p>
+      </div>
+    </section>
+
+    <section id="adminPanel" class="card hidden">
+      <div class="section-title">
+        <div>
+          <h2>Administrator Panel</h2>
+          <p>Manage all templates and export or restore the library.</p>
+        </div>
+        <button id="adminLogoutBtn" class="secondary-btn">Log Out</button>
+      </div>
+
+      <div class="admin-actions">
+        <button id="exportBackupBtn" class="secondary-btn">Export Backup</button>
+        <label class="secondary-btn file-btn">Restore Backup<input id="restoreBackupInput" type="file" accept=".json" /></label>
+        <button id="exportCsvBtn" class="secondary-btn">Export CSV</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Medication</th>
+              <th>Contributor</th>
+              <th>Status</th>
+              <th>Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="viewDialog">
+    <div class="dialog-card wide">
+      <div class="dialog-heading">
+        <div>
+          <p id="viewCategory" class="badge"></p>
+          <h2 id="viewTitle"></h2>
+          <p id="viewMeta" class="muted"></p>
+        </div>
+        <button id="closeViewBtn" class="icon-close" aria-label="Close">×</button>
+      </div>
+
+      <div id="viewContent" class="report-preview"></div>
+
+      <div class="actions sticky-actions">
+        <button id="copyReportBtn" class="primary-btn">Copy Complete Report</button>
+        <button id="editOwnTemplateBtn" class="secondary-btn">Edit This Template</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="templateDialog">
+    <form id="templateForm" class="dialog-card wide">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">Community Contribution</p>
+          <h2 id="templateDialogTitle">Add New Template</h2>
+        </div>
+        <button type="button" id="closeTemplateBtn" class="icon-close" aria-label="Close">×</button>
+      </div>
+
+      <input id="templateId" type="hidden" />
+
+      <div class="form-grid two">
+        <label>
+          Case Title
+          <input id="caseTitle" type="text" required placeholder="e.g., Omitted Posaconazole Loading Dose" />
+        </label>
+        <label>
+          Medication
+          <input id="medication" type="text" required placeholder="e.g., Posaconazole" />
+        </label>
+      </div>
+
+      <div class="form-grid two">
+        <label>
+          Category
+          <select id="category" required></select>
+        </label>
+        <label>
+          Error Stage
+          <select id="errorStage" required>
+            <option value="Before Reaching Patient">Before Reaching Patient</option>
+            <option value="After Reaching Patient">After Reaching Patient</option>
+          </select>
+        </label>
+      </div>
+
+      <label>
+        Medical Error Identified
+        <textarea id="medicalError" rows="4" required placeholder="Clearly describe the prescribing error."></textarea>
+      </label>
+
+      <label>
+        Scenario
+        <textarea id="scenario" rows="5" required placeholder="Describe how the case was identified and the relevant clinical context."></textarea>
+      </label>
+
+      <label>
+        Pharmacist Intervention
+        <textarea id="intervention" rows="5" required placeholder="Describe the action taken by the pharmacist."></textarea>
+      </label>
+
+      <label>
+        Harm Avoided / Expected Harm
+        <textarea id="harm" rows="5" required placeholder="Describe the harm avoided or the harm that could occur."></textarea>
+      </label>
+
+      <label>
+        Prevention Recommendation
+        <textarea id="recommendation" rows="5" required placeholder="Add practical recommendations to prevent recurrence."></textarea>
+      </label>
+
+      <div class="form-grid two">
+        <label>
+          Contributor Name
+          <input id="contributor" type="text" required placeholder="Your name or initials" />
+        </label>
+        <label>
+          Personal Edit PIN
+          <input id="authorPin" type="password" minlength="4" maxlength="20" required placeholder="Used later to edit your template" />
+        </label>
+      </div>
+
+      <label class="checkbox-row">
+        <input id="confirmNoPatientData" type="checkbox" required />
+        <span>I confirm that this template contains no patient-identifiable information.</span>
+      </label>
+
+      <div class="actions">
+        <button type="button" id="cancelTemplateBtn" class="secondary-btn">Cancel</button>
+        <button type="submit" class="primary-btn">Save Template</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="pinDialog">
+    <form id="pinForm" class="dialog-card">
+      <h2>Edit Contributor Template</h2>
+      <p class="muted">Enter the personal PIN created when this template was added.</p>
+      <input id="pinTemplateId" type="hidden" />
+      <label>
+        Personal Edit PIN
+        <input id="editPinInput" type="password" required />
+      </label>
+      <div class="actions">
+        <button type="button" id="cancelPinBtn" class="secondary-btn">Cancel</button>
+        <button type="submit" class="primary-btn">Continue</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="adminLoginDialog">
+    <form id="adminLoginForm" class="dialog-card">
+      <h2 id="adminLoginTitle">Administrator Login</h2>
+      <p id="adminLoginHelp" class="muted"></p>
+      <label>
+        Administrator Password
+        <input id="adminPassword" type="password" required />
+      </label>
+      <label id="adminConfirmWrap" class="hidden">
+        Confirm Password
+        <input id="adminPasswordConfirm" type="password" />
+      </label>
+      <div class="actions">
+        <button type="button" id="cancelAdminBtn" class="secondary-btn">Cancel</button>
+        <button type="submit" class="primary-btn">Continue</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer>
+    <p>SRSVault v1.0 · Prescribing Error Documentation Template Library</p>
+    <p>Prototype only — do not enter patient-identifiable information.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
